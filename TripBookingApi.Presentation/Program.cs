@@ -1,4 +1,10 @@
+using Microsoft.AspNetCore.Diagnostics;
+using Newtonsoft.Json;
+using System.Net;
+using TripBookingApi.Application.Interfaces;
+using TripBookingApi.Domain.Exceptions;
 using TripBookingApi.Infrastructure;
+using TripBookingApi.Infrastructure.DbContexts;
 using Websky.Nacho.Application;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,8 +19,31 @@ builder.Services
     .AddInfrastructure(builder.Configuration)
     .AddApplication();
 
+
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<IDbContext>();
+    dbContext.SeedData();
+}
+
+app.UseExceptionHandler(appError =>
+{
+    appError.Run(async context =>
+    {
+        context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+        context.Response.ContentType = "application/json";
+        var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
+        if (contextFeature != null)
+        {
+            await context.Response.WriteAsync(JsonConvert.SerializeObject(new ExceptionMessage{
+                StatusCode = context.Response.StatusCode,
+                Content = contextFeature.Error.Message
+            }).ToString());
+        }
+    });
+});
 
 app.UseSwagger();
 app.UseSwaggerUI();

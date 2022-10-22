@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ using TripBookingApi.Domain.Entities;
 
 namespace TripBookingApi.Application.Trips.Commands
 {
-    public class CreateTripCommand : IRequest
+    public class UpdateTripCommand : IRequest
     {
         public string Name { get; set; } = "";
         public int CountryId { get; set; }
@@ -18,17 +19,20 @@ namespace TripBookingApi.Application.Trips.Commands
         public int NumberOfSeats { get; set; }
     }
 
-    public class CreateTripCommandHandler : IRequestHandler<CreateTripCommand>
+    public class UpdateTripCommandHandler : IRequestHandler<UpdateTripCommand>
     {
         private readonly IDbContext _dbContext;
-        public CreateTripCommandHandler(IDbContext dbContext)
+        public UpdateTripCommandHandler(IDbContext dbContext)
         {
             _dbContext = dbContext;
         }
-        public async Task<Unit> Handle(CreateTripCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(UpdateTripCommand request, CancellationToken cancellationToken)
         {
+            var trip = await _dbContext.Trips
+                .AsNoTracking()
+                .FirstOrDefaultAsync(t => t.Name == request.Name) ?? throw new Exception("trip not found");
             var country = await _dbContext.Countries.FindAsync(request.CountryId) ?? throw new Exception("Country not found");
-            await _dbContext.Trips.AddAsync(
+            _dbContext.Trips.Update(
                 new Trip(request.Name, country, request.Description, request.StartDate, request.NumberOfSeats));
             await _dbContext.SaveChangesAsync(cancellationToken);
             return Unit.Value;

@@ -4,16 +4,16 @@ using TripBookingApi.Domain.Entities;
 
 namespace TripBookingApi.Infrastructure.DbContexts
 {
-    internal class InMemoryDbContext : DbContext, IDbContext
+    public class InMemoryDbContext : DbContext, IDbContext
     {
         public InMemoryDbContext(DbContextOptions<InMemoryDbContext> options) : base(options)
         {
 
         }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        
+        public void SeedData()
         {
-            modelBuilder.Entity<Country>().HasData(
+            Countries.AddRange(
                 new Country(1, "Poland"),
                 new Country(2, "Ukraine"),
                 new Country(3, "France"),
@@ -30,6 +30,7 @@ namespace TripBookingApi.Infrastructure.DbContexts
                 new Country(14, "Sweden"),
                 new Country(15, "United States")
                 );
+            this.SaveChanges();
         }
 
         public DbSet<Trip> Trips { get; set; }

@@ -5,8 +5,10 @@ namespace TripBookingApi.Application.Interfaces
 {
     public interface IDbContext
     {
-        public DbSet<Trip> Trips { get; set; }
-        public DbSet<Country> Countries { get; set; }
-        public DbSet<Booking> Bookings { get; set; }
+        DbSet<Trip> Trips { get; set; }
+        DbSet<Country> Countries { get; set; }
+        DbSet<Booking> Bookings { get; set; }
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
+        void SeedData();
     }
 }

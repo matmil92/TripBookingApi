@@ -19,14 +19,14 @@ namespace TripBookingApi.Domain.Entities
             Bookings = new List<Booking>();
         }
 
-        public Trip(string name, Country country, string description, DateTime startDate, int numberOfSeats, List<Booking> bookings)
+        public Trip(string name, Country country, string description, DateTime startDate, int numberOfSeats)
         {
             Name = name;
             Country = country;
             Description = description;
             StartDate = startDate;
             NumberOfSeats = numberOfSeats;
-            Bookings = bookings;
+            Bookings = new List<Booking>();
         }
 
         [Key]

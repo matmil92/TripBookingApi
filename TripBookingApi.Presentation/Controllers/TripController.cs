@@ -1,13 +1,12 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using TripBookingApi.Application.Trips.Commands;
 using TripBookingApi.Application.Trips.Queries;
 using TripBookingApi.Application.Trips.Queries.ViewModels;
 
 namespace TripBookingApi.Presentation.Controllers
 {
-    [ApiController]
-    [Route("[controller]")]
-    public class TripController : ControllerBase
+    public class TripController : BaseController
     {
         private readonly IMediator _mediator;
         public TripController(IMediator mediator)
@@ -16,9 +15,33 @@ namespace TripBookingApi.Presentation.Controllers
         }
 
         [HttpGet("list")]
-        public async Task<ActionResult<List<TripListViewModel>>> GetList()
+        public async Task<ActionResult<IEnumerable<TripListViewModel>>> GetList()
         {
-            return await _mediator.Send(new GetAllTripsQuery());
+            return Ok(await _mediator.Send(new GetAllTripsQuery()));
+        }
+
+        [HttpGet("details")]
+        public async Task<ActionResult<IEnumerable<TripListViewModel>>> GetList([FromQuery] GetTripDetailQuery query)
+        {
+            return Ok(await _mediator.Send(query));
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Create(CreateTripCommand command)
+        {
+            return Ok(await _mediator.Send(command));
+        }
+
+        [HttpPut]
+        public async Task<ActionResult> Create(UpdateTripCommand command)
+        {
+            return Ok(await _mediator.Send(command));
+        }
+
+        [HttpDelete]
+        public async Task<ActionResult> Create([FromQuery] DeleteTripCommand command)
+        {
+            return Ok(await _mediator.Send(command));
         }
     }
 }

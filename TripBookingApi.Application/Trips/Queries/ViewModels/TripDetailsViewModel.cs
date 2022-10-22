@@ -1,12 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TripBookingApi.Application.Trips.Queries.ViewModels
+﻿namespace TripBookingApi.Application.Trips.Queries.ViewModels
 {
-    internal class TripDetailsViewModel
+    public class TripDetailsViewModel
     {
+        public TripDetailsViewModel(string name, string countryName, string description, DateTime startDate, int numberOfSeats, IEnumerable<string> bookings)
+        {
+            Name = name;
+            CountryName = countryName;
+            Description = description;
+            StartDate = startDate;
+            NumberOfSeats = numberOfSeats;
+            Bookings = bookings;
+        }
+
+        public string Name { get; private set; }
+        public string CountryName { get; private set; }
+        public string Description { get; private set; }
+        public DateTime StartDate { get; private set; }
+        public int NumberOfSeats { get; private set; }
+        public IEnumerable<string> Bookings { get; private set; }
     }
 }
