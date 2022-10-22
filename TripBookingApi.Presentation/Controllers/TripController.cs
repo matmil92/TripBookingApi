@@ -8,10 +8,8 @@ namespace TripBookingApi.Presentation.Controllers
 {
     public class TripController : BaseController
     {
-        private readonly IMediator _mediator;
-        public TripController(IMediator mediator)
+        public TripController(IMediator mediator) : base(mediator)
         {
-            _mediator = mediator;
         }
 
         [HttpGet("list")]

@@ -4,7 +4,6 @@ using System.Net;
 using TripBookingApi.Application.Interfaces;
 using TripBookingApi.Domain.Exceptions;
 using TripBookingApi.Infrastructure;
-using TripBookingApi.Infrastructure.DbContexts;
 using Websky.Nacho.Application;
 
 var builder = WebApplication.CreateBuilder(args);

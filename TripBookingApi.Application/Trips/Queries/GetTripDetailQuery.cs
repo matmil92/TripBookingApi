@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
 using TripBookingApi.Application.Interfaces;
 using TripBookingApi.Application.Trips.Queries.ViewModels;
 
@@ -18,9 +19,11 @@ namespace TripBookingApi.Application.Trips.Queries
         }
         public async Task<TripDetailsViewModel> Handle(GetTripDetailQuery request, CancellationToken cancellationToken)
         {
-            var trip = await _dbContext.Trips.FindAsync(request.TripName);
-            if(trip != null)
-            {
+            var trip = await _dbContext.Trips
+                .Include(c => c.Country)
+                .Include(b => b.Bookings)
+                .FirstOrDefaultAsync(t => t.Name == request.TripName) ?? throw new Exception("trip not found");
+
                 return new TripDetailsViewModel(
                     trip.Name,
                     trip.Country.CountryName,
@@ -28,11 +31,6 @@ namespace TripBookingApi.Application.Trips.Queries
                     trip.StartDate,
                     trip.NumberOfSeats,
                     trip.Bookings.Select(b => b.Email));
-            }
-            else
-            {
-                throw new Exception("trip not found");
-            }
         }
     }
 }

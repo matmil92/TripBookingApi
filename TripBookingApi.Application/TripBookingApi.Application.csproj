@@ -16,4 +16,8 @@
     <ProjectReference Include="..\TripBookingApi.Domain\TripBookingApi.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Bookings\Commands\" />
+  </ItemGroup>
+
 </Project>

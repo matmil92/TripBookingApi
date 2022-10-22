@@ -21,6 +21,7 @@ namespace TripBookingApi.Domain.Entities
             Trip = trip;
             Email = email;
         }
+
         [Key]
         [Column(Order = 1)]
         public Trip Trip { get; set; }
