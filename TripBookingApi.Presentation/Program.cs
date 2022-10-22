@@ -31,11 +31,18 @@ app.UseExceptionHandler(appError =>
 {
     appError.Run(async context =>
     {
-        context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
         context.Response.ContentType = "application/json";
         var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
         if (contextFeature != null)
         {
+            if(contextFeature.Error.GetType()?.BaseType?.Name == typeof(BussinessException).Name)
+            {
+                context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            }
+            else
+            {
+                context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+            }
             await context.Response.WriteAsync(JsonConvert.SerializeObject(new ExceptionMessage{
                 StatusCode = context.Response.StatusCode,
                 Content = contextFeature.Error.Message

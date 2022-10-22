@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TripBookingApi.Domain.Entities
 {
@@ -27,6 +22,7 @@ namespace TripBookingApi.Domain.Entities
         public Trip Trip { get; set; }
         [Key]
         [Column(Order = 2)]
+        [MaxLength(200)]
         public string Email { get; set; }
     }
 }

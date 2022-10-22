@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using TripBookingApi.Application.Interfaces;
 using TripBookingApi.Application.Trips.Queries.ViewModels;
+using TripBookingApi.Domain.Exceptions.Trip;
 
 namespace TripBookingApi.Application.Trips.Queries
 {
@@ -22,9 +23,9 @@ namespace TripBookingApi.Application.Trips.Queries
             var trip = await _dbContext.Trips
                 .Include(c => c.Country)
                 .Include(b => b.Bookings)
-                .FirstOrDefaultAsync(t => t.Name == request.TripName) ?? throw new Exception("trip not found");
+                .FirstOrDefaultAsync(t => t.Name == request.TripName) ?? throw new TripNotFoundException();
 
-                return new TripDetailsViewModel(
+            return new TripDetailsViewModel(
                     trip.Name,
                     trip.Country.CountryName,
                     trip.Description,

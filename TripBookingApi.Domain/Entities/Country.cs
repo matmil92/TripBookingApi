@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace TripBookingApi.Domain.Entities
 {
@@ -24,6 +19,7 @@ namespace TripBookingApi.Domain.Entities
 
         [Key]
         public int Id { get; set; }
+        [MaxLength(200)]
         public string CountryName { get; set; }
         public List<Trip> Trips { get; set; }
 

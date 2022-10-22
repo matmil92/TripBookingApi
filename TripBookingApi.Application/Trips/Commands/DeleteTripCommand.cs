@@ -1,18 +1,14 @@
 ﻿using MediatR;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TripBookingApi.Application.Interfaces;
-using TripBookingApi.Domain.Entities;
+using TripBookingApi.Domain.Exceptions.Trip;
 
 namespace TripBookingApi.Application.Trips.Commands
 {
     public class DeleteTripCommand : IRequest
     {
         [Required]
+        [MaxLength(200)]
         public string Name { get; set; } = "";
     }
 
@@ -25,7 +21,7 @@ namespace TripBookingApi.Application.Trips.Commands
         }
         public async Task<Unit> Handle(DeleteTripCommand request, CancellationToken cancellationToken)
         {
-            var trip = await _dbContext.Trips.FindAsync(request.Name) ?? throw new Exception("trip not found");
+            var trip = await _dbContext.Trips.FindAsync(request.Name) ?? throw new TripNotFoundException();
             _dbContext.Trips.Remove(trip);
             await _dbContext.SaveChangesAsync(cancellationToken);
             return Unit.Value;

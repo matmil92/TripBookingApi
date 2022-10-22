@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using TripBookingApi.Application.Interfaces;
+using TripBookingApi.Domain.Exceptions.Booking;
+using TripBookingApi.Domain.Exceptions.Trip;
 
 namespace TripBookingApi.Application.Bookings.Commands
 {
@@ -10,6 +12,7 @@ namespace TripBookingApi.Application.Bookings.Commands
         [Required]
         public string TripName { get; set; } = "";
         [Required]
+        [EmailAddress]
         public string Email { get; set; } = "";
     }
 
@@ -24,8 +27,8 @@ namespace TripBookingApi.Application.Bookings.Commands
         {
             var trip = await _dbContext.Trips
                 .Include(b => b.Bookings)
-                .FirstOrDefaultAsync(t => t.Name == request.TripName) ?? throw new Exception("trip not found");
-            var booking = trip.Bookings.Find(b => b.Email == request.Email) ?? throw new Exception("booking not found");
+                .FirstOrDefaultAsync(t => t.Name == request.TripName) ?? throw new TripNotFoundException();
+            var booking = trip.Bookings.Find(b => b.Email == request.Email) ?? throw new BookingNotFoundException();
             trip.Bookings.Remove(booking);
             _dbContext.Trips.Update(trip);
             await _dbContext.SaveChangesAsync(cancellationToken);
