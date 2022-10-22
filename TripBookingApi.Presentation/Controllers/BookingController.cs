@@ -13,13 +13,15 @@ namespace TripBookingApi.Presentation.Controllers
         [HttpPost]
         public async Task<ActionResult> Register(RegisterBookingCommand command)
         {
-            return Ok(await _mediator.Send(command));
+            await _mediator.Send(command);
+            return Ok();
         }
 
         [HttpDelete]
         public async Task<ActionResult> Unregister([FromQuery] UnregisterBookingCommand command)
         {
-            return Ok(await _mediator.Send(command));
+            await _mediator.Send(command);
+            return Ok();
         }
     }
 }

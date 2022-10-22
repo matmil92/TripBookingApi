@@ -27,19 +27,22 @@ namespace TripBookingApi.Presentation.Controllers
         [HttpPost]
         public async Task<ActionResult> Create(CreateTripCommand command)
         {
-            return Ok(await _mediator.Send(command));
+            await _mediator.Send(command);
+            return Ok();
         }
 
         [HttpPut]
         public async Task<ActionResult> Create(UpdateTripCommand command)
         {
-            return Ok(await _mediator.Send(command));
+            await _mediator.Send(command);
+            return Ok();
         }
 
         [HttpDelete]
-        public async Task<ActionResult> Create([FromQuery] DeleteTripCommand command)
+        public async Task<ActionResult> Delete([FromQuery] DeleteTripCommand command)
         {
-            return Ok(await _mediator.Send(command));
+            await _mediator.Send(command);
+            return Ok();
         }
     }
 }
